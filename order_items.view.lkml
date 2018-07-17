@@ -19,12 +19,6 @@ view: order_items {
     sql: ${TABLE}.order_id ;;
   }
 
-  dimension: within_range {
-    type: yesno
-    sql: ${returned_date} > ${test_date}
-      AND ${returned_date} < CURDATE();;
-  }
-
   dimension_group: returned {
     type: time
     timeframes: [
@@ -38,6 +32,46 @@ view: order_items {
     ]
     sql: ${TABLE}.returned_at ;;
   }
+
+  dimension: returned {
+    type: yesno
+    sql: ${returned_date} is not null ;;
+
+  }
+
+  dimension: sale_price {
+    type: number
+    sql: ${TABLE}.sale_price ;;
+  }
+
+  measure: count {
+    type: count
+    drill_fields: [id, inventory_items.id, orders.id]
+  }
+
+# Test MTD from Zach's discourse post
+
+  dimension: is_before_mtd {
+    type: yesno
+    sql:
+      (EXTRACT(DAY FROM ${returned_time}) < EXTRACT(DAY FROM CURRENT_TIMESTAMP)
+          OR
+          (
+            EXTRACT(DAY FROM ${returned_time}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP) AND
+            EXTRACT(HOUR FROM ${returned_time}) < EXTRACT(HOUR FROM CURRENT_TIMESTAMP)
+          )
+          OR
+          (
+            EXTRACT(DAY FROM ${returned_time}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP) AND
+            EXTRACT(HOUR FROM ${returned_time}) <= EXTRACT(HOUR FROM CURRENT_TIMESTAMP) AND
+            EXTRACT(MINUTE FROM ${returned_time}) < EXTRACT(MINUTE FROM CURRENT_TIMESTAMP)
+          )
+        )
+      ;;
+  }
+
+
+# Sum after a date test
 
   dimension_group: test {
     type: time
@@ -53,14 +87,10 @@ view: order_items {
     sql: DATE_ADD("2017-03-01", INTERVAL 2 MONTH) ;;
   }
 
-  dimension: sale_price {
-    type: number
-    sql: ${TABLE}.sale_price ;;
-  }
-
-  measure: count {
-    type: count
-    drill_fields: [id, inventory_items.id, orders.id]
+  dimension: within_range {
+    type: yesno
+    sql: ${returned_date} > ${test_date}
+      AND ${returned_date} < CURDATE();;
   }
 
   measure: sum_price {
@@ -90,4 +120,5 @@ view: order_items {
       within_range
     ]
   }
+#   End of sum test
 }

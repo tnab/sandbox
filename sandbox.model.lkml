@@ -16,7 +16,7 @@ persist_with: sandbox_default_datagroup
 explore: events {
   join: users {
     type: left_outer
-    sql_on: ${events.user_id} = ${users.id} ;;
+    sql_on: ${events.user_id} = ${users.id} AND ${events.user_id} < 6 ;;
     relationship: many_to_one
   }
 }
@@ -50,7 +50,7 @@ explore: order_items {
 
   join: users {
     type: left_outer
-    sql_on: ${orders.user_id} = ${users.id} ;;
+    sql_on: ${orders.user_id} = ${users.id} AND ${users.id}  ;;
     relationship: many_to_one
   }
 }

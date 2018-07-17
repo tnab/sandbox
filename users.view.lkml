@@ -72,6 +72,13 @@ view: users {
     drill_fields: [detail*]
   }
 
+  dimension: age_groups {
+    type: tier
+    tiers: [0, 18, 30, 60]
+    style: integer
+    sql: ${age} ;;
+  }
+
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
