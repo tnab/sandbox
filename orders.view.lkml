@@ -1,5 +1,5 @@
 view: orders {
-  sql_table_name: demo_db.orders ;;
+  sql_table_name: demo_db.orders;;
 
   dimension: id {
     primary_key: yes
@@ -16,6 +16,7 @@ view: orders {
       week,
       month,
       quarter,
+      quarter_of_year,
       year
     ]
     sql: ${TABLE}.created_at ;;
