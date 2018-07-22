@@ -30,6 +30,12 @@ view: users {
       time,
       date,
       week,
+      week_of_year,
+      hour_of_day,
+      minute,
+      day_of_week,
+      day_of_week_index,
+      day_of_month,
       month,
       quarter,
       year
@@ -65,6 +71,37 @@ view: users {
   dimension: zip {
     type: zipcode
     sql: ${TABLE}.zip ;;
+  }
+
+  dimension: is_before_ytd {
+    type: yesno
+    sql:
+      (EXTRACT(DAY FROM ${created_time}) < EXTRACT(DAY FROM CURRENT_TIMESTAMP)
+          OR
+          (
+            EXTRACT(DAY FROM ${created_time}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP) AND
+            EXTRACT(HOUR FROM ${created_time}) < EXTRACT(HOUR FROM CURRENT_TIMESTAMP)
+          )
+          OR
+          (
+            EXTRACT(DAY FROM ${created_time}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP) AND
+            EXTRACT(HOUR FROM ${created_time}) <= EXTRACT(HOUR FROM CURRENT_TIMESTAMP) AND
+            EXTRACT(MINUTE FROM ${created_time}) < EXTRACT(MINUTE FROM CURRENT_TIMESTAMP)
+          )
+        )
+      ;;
+  }
+
+  dimension: yoy {
+    type: yesno
+    sql:
+    (
+    (${created_month} < month(current_timestamp))
+    OR
+    ${created_month} =  month(CURRENT_TIMESTAMP)
+    AND
+    ${created_day_of_month} <=  DAYOFMONTH (CURRENT_TIMESTAMP)
+    );;
   }
 
   measure: count {

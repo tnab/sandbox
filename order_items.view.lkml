@@ -71,6 +71,26 @@ view: order_items {
   }
 
 
+
+  dimension: is_before_ytd {
+    type: yesno
+    sql:
+      (EXTRACT(DAY FROM ${returned_time}) < EXTRACT(DAY FROM CURRENT_TIMESTAMP)
+          OR
+          (
+            EXTRACT(DAY FROM ${returned_time}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP) AND
+            EXTRACT(HOUR FROM ${returned_time}) < EXTRACT(HOUR FROM CURRENT_TIMESTAMP)
+          )
+          OR
+          (
+            EXTRACT(DAY FROM ${returned_time}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP) AND
+            EXTRACT(HOUR FROM ${returned_time}) <= EXTRACT(HOUR FROM CURRENT_TIMESTAMP) AND
+            EXTRACT(MINUTE FROM ${returned_time}) < EXTRACT(MINUTE FROM CURRENT_TIMESTAMP)
+          )
+        )
+      ;;
+  }
+
 # Sum after a date test
 
   dimension_group: test {
