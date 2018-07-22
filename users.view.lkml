@@ -59,7 +59,7 @@ view: users {
 
   dimension: state {
     type: string
-    sql: ${TABLE}.BREAKBREAKBREAKstate ;;
+    sql: ${TABLE}.state ;;
   }
 
   dimension: zip {
