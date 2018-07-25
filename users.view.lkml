@@ -37,10 +37,12 @@ view: users {
       day_of_week_index,
       day_of_month,
       month,
+      month_num,
       quarter,
       year
     ]
     sql: ${TABLE}.created_at ;;
+
   }
 
   dimension: email {
@@ -82,28 +84,65 @@ view: users {
             EXTRACT(DAY FROM ${created_time}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP) AND
             EXTRACT(HOUR FROM ${created_time}) < EXTRACT(HOUR FROM CURRENT_TIMESTAMP)
           )
-          OR
+/*          OR
           (
             EXTRACT(DAY FROM ${created_time}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP) AND
             EXTRACT(HOUR FROM ${created_time}) <= EXTRACT(HOUR FROM CURRENT_TIMESTAMP) AND
             EXTRACT(MINUTE FROM ${created_time}) < EXTRACT(MINUTE FROM CURRENT_TIMESTAMP)
           )
-        )
+*/        )
       ;;
   }
 
-  dimension: yoy {
+  dimension: yoy  {
     type: yesno
     sql:
     (
-    (${created_month} < month(current_timestamp))
+    (
+         WEEKOFYEAR(users.created_at) < WEEKOFYEAR(current_timestamp)
+    )
     OR
-    ${created_month} =  month(CURRENT_TIMESTAMP)
+    (
+        WEEKOFYEAR(users.created_at) = WEEKOFYEAR(current_timestamp) AND
+        WEEKDAY(users.created_at) <= WEEKDAY(current_timestamp)
+        ))
+
+
+  ;;
+  }
+
+#       weekofyear(users.created_at) <= weekofyear(users.created_at) AND
+#     dayofweek(users.created_at) <= dayofweek(current_timestamp)
+#   OR
+#     (
+#     day(users.created_at) = day(current_timestamp) AND
+#     dayofweek(users.created_at) <= dayofweek(current_timestamp)
+#     )
+
+#     month(users.created_at) = month(current_timestamp) AND
+#     weekofyear(users.created_at) = weekofyear(current_timestamp) AND
+#     dayofweek(users.created_at) <= dayofweek(current_timestamp)
+
+
+  dimension: yoy_test {
+    type: yesno
+    sql:
+    (
+    (${created_month_num} < MONTH(CURRENT_TIMESTAMP))
+    OR
+    (${created_month_num} =  MONTH(CURRENT_TIMESTAMP)
     AND
     ${created_day_of_month} <=  DAYOFMONTH (CURRENT_TIMESTAMP)
+    AND
+    ${created_day_of_week_index} <=
+    (CASE WHEN DAYOFWEEK(CURRENT_TIMESTAMP) = 1 THEN 6
+    ELSE (DAYOFWEEK(CURRENT_TIMESTAMP) - 2) END )
+    )
     );;
   }
 
+#       AND
+#     ${created_day_of_week_index} <= DAYOFWEEK(CURRENT_TIMESTAMP)
   measure: count {
     type: count
     drill_fields: [detail*]
