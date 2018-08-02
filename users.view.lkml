@@ -8,8 +8,17 @@ view: users {
   }
 
   dimension: age {
+    type: date_time
+    sql: ${TABLE}.age ;;
+  }
+
+  dimension: 24test {
     type: number
     sql: ${TABLE}.age ;;
+  }
+
+  dimension: foo_explore_name {
+    sql: users ;;
   }
 
   dimension: city {
@@ -42,7 +51,6 @@ view: users {
       year
     ]
     sql: ${TABLE}.created_at ;;
-
   }
 
   dimension: email {
@@ -97,18 +105,18 @@ view: users {
   dimension: yoy  {
     type: yesno
     sql:
-    (
-    (
-         WEEKOFYEAR(users.created_at) < WEEKOFYEAR(current_timestamp)
-    )
-    OR
-    (
-        WEEKOFYEAR(users.created_at) = WEEKOFYEAR(current_timestamp) AND
-        WEEKDAY(users.created_at) <= WEEKDAY(current_timestamp)
-        ))
+          (
+          (
+               WEEKOFYEAR(users.created_at) < WEEKOFYEAR(current_timestamp)
+          )
+          OR
+          (
+              WEEKOFYEAR(users.created_at) = WEEKOFYEAR(current_timestamp) AND
+              WEEKDAY(users.created_at) <= WEEKDAY(current_timestamp)
+              ))
 
 
-  ;;
+        ;;
   }
 
 #       weekofyear(users.created_at) <= weekofyear(users.created_at) AND
@@ -127,22 +135,23 @@ view: users {
   dimension: yoy_test {
     type: yesno
     sql:
-    (
-    (${created_month_num} < MONTH(CURRENT_TIMESTAMP))
-    OR
-    (${created_month_num} =  MONTH(CURRENT_TIMESTAMP)
-    AND
-    ${created_day_of_month} <=  DAYOFMONTH (CURRENT_TIMESTAMP)
-    AND
-    ${created_day_of_week_index} <=
-    (CASE WHEN DAYOFWEEK(CURRENT_TIMESTAMP) = 1 THEN 6
-    ELSE (DAYOFWEEK(CURRENT_TIMESTAMP) - 2) END )
-    )
-    );;
+          (
+          (${created_month_num} < MONTH(CURRENT_TIMESTAMP))
+          OR
+          (${created_month_num} =  MONTH(CURRENT_TIMESTAMP)
+          AND
+          ${created_day_of_month} <=  DAYOFMONTH (CURRENT_TIMESTAMP)
+          AND
+          ${created_day_of_week_index} <=
+          (CASE WHEN DAYOFWEEK(CURRENT_TIMESTAMP) = 1 THEN 6
+          ELSE (DAYOFWEEK(CURRENT_TIMESTAMP) - 2) END )
+          )
+          );;
   }
 
 #       AND
 #     ${created_day_of_week_index} <= DAYOFWEEK(CURRENT_TIMESTAMP)
+
   measure: count {
     type: count
     drill_fields: [detail*]

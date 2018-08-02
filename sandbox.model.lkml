@@ -13,6 +13,8 @@ datagroup: sandbox_default_datagroup {
 
 persist_with: sandbox_default_datagroup
 
+explore: derived_test_base {}
+
 explore: events {
   join: users {
     type: left_outer
