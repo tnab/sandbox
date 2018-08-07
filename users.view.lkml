@@ -86,19 +86,19 @@ view: users {
   dimension: is_before_ytd {
     type: yesno
     sql:
-      (EXTRACT(DAY FROM ${created_time}) < EXTRACT(DAY FROM CURRENT_TIMESTAMP)
+      (DAYOFYEAR(${created_time}) < DAYOFYEAR(CURRENT_TIMESTAMP)
           OR
           (
-            EXTRACT(DAY FROM ${created_time}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP) AND
+            DAYOFYEAR(${created_time}) = DAYOFYEAR(CURRENT_TIMESTAMP) AND
             EXTRACT(HOUR FROM ${created_time}) < EXTRACT(HOUR FROM CURRENT_TIMESTAMP)
           )
-/*          OR
+         OR
           (
-            EXTRACT(DAY FROM ${created_time}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP) AND
+            DAYOFYEAR(${created_time}) = DAYOFYEAR(CURRENT_TIMESTAMP) AND
             EXTRACT(HOUR FROM ${created_time}) <= EXTRACT(HOUR FROM CURRENT_TIMESTAMP) AND
             EXTRACT(MINUTE FROM ${created_time}) < EXTRACT(MINUTE FROM CURRENT_TIMESTAMP)
           )
-*/        )
+       )
       ;;
   }
 

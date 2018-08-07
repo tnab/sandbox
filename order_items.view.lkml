@@ -44,16 +44,32 @@ view: order_items {
     sql: ${TABLE}.sale_price ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [id, inventory_items.id, orders.id]
+  measure: count_d {
+    type: count_distinct
+    sql: ${returned_date} IS NULL  ;;
+}
+
+measure: count {
+  type: count
+  drill_fields: [id, inventory_items.id, orders.id]
+}
+
+
+parameter: period {
+  type: string
+  allowed_value: {
+    value: "mtd"
   }
+  allowed_value: {
+    value: "ytd"
+  }
+}
 
 # Test MTD from Zach's discourse post
 
-  dimension: is_before_mtd {
-    type: yesno
-    sql:
+dimension: is_before_mtd {
+  type: yesno
+  sql:
       (EXTRACT(DAY FROM ${returned_time}) < EXTRACT(DAY FROM CURRENT_TIMESTAMP)
           OR
           (
@@ -68,13 +84,13 @@ view: order_items {
           )
         )
       ;;
-  }
+}
 
 
 
-  dimension: is_before_ytd {
-    type: yesno
-    sql:
+dimension: is_before_ytd {
+  type: yesno
+  sql:
       (EXTRACT(DAY FROM ${returned_time}) < EXTRACT(DAY FROM CURRENT_TIMESTAMP)
           OR
           (
@@ -89,56 +105,56 @@ view: order_items {
           )
         )
       ;;
-  }
+}
 
 # Sum after a date test
 
-  dimension_group: test {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: DATE_ADD("2017-03-01", INTERVAL 2 MONTH) ;;
-  }
+dimension_group: test {
+  type: time
+  timeframes: [
+    raw,
+    time,
+    date,
+    week,
+    month,
+    quarter,
+    year
+  ]
+  sql: DATE_ADD("2017-03-01", INTERVAL 2 MONTH) ;;
+}
 
-  dimension: within_range {
-    type: yesno
-    sql: ${returned_date} > ${test_date}
-      AND ${returned_date} < CURDATE();;
-  }
+dimension: within_range {
+  type: yesno
+  sql: ${returned_date} > ${test_date}
+    AND ${returned_date} < CURDATE();;
+}
 
-  measure: sum_price {
-    type: sum
-    sql: ${sale_price} ;;
-    drill_fields: [details*]
-    value_format: "0.##"
-  }
+measure: sum_price {
+  type: sum
+  sql: ${sale_price} ;;
+  drill_fields: [details*]
+  value_format: "0.##"
+}
 
-  measure: test_sum_price {
-    type: sum
-    sql: ${sale_price} ;;
-    filters: {
-      field: within_range
-      value: "yes"
-    }
-    drill_fields: [details*]
-    value_format: "0.##"
+measure: test_sum_price {
+  type: sum
+  sql: ${sale_price} ;;
+  filters: {
+    field: within_range
+    value: "yes"
   }
+  drill_fields: [details*]
+  value_format: "0.##"
+}
 
-  set: details {
-    fields: [
-      id,
-      test_date,
-      returned_date,
-      sale_price,
-      within_range
-    ]
-  }
+set: details {
+  fields: [
+    id,
+    test_date,
+    returned_date,
+    sale_price,
+    within_range
+  ]
+}
 #   End of sum test
 }

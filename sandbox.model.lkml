@@ -31,6 +31,16 @@ explore: inventory_items {
   }
 }
 
+
+explore: order_items_test {
+  from: order_items
+  view_name: order_items
+  sql_always_where:
+  CASE
+  WHEN {% parameter order_items.period %} = 'mtd' THEN ${is_before_mtd} else ${is_before_ytd} end
+  ;;
+}
+
 explore: order_items {
   join: inventory_items {
     type: left_outer
