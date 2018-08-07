@@ -37,7 +37,8 @@ explore: order_items_test {
   view_name: order_items
   sql_always_where:
   CASE
-  WHEN {% parameter order_items.period %} = 'mtd' THEN ${is_before_mtd} else ${is_before_ytd} end
+  WHEN {% parameter order_items.period %} = 'mtd'
+  THEN ${is_before_mtd} else ${is_before_ytd} end
   ;;
 }
 
