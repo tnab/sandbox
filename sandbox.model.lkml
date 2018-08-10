@@ -15,6 +15,8 @@ persist_with: sandbox_default_datagroup
 
 explore: derived_test_base {}
 
+explore: users_extended {}
+
 
 explore: events {
   join: users {
