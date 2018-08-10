@@ -13,7 +13,13 @@ datagroup: sandbox_default_datagroup {
 
 persist_with: sandbox_default_datagroup
 
-explore: derived_test_base {}
+explore: derived_test_base {
+  join: derived_test_self {
+    from: derived_test_base
+    sql_on: ${derived_test_base.city} = ${derived_test_self.city} ;;
+    relationship: many_to_many
+  }
+}
 
 explore: events {
   join: users {
