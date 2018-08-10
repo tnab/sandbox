@@ -169,10 +169,7 @@ view: users {
     fields: [
       id,
       first_name,
-      last_name,
-      events.count,
-      orders.count,
-      user_data.count
+      last_name
     ]
   }
 }
