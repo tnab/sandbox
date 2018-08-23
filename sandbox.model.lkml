@@ -4,7 +4,7 @@ connection: "thelook"
 include: "*.view"
 
 # include all the dashboards
-include: "*.dashboard"
+# include: "*.dashboard"
 
 datagroup: sandbox_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;
@@ -16,6 +16,16 @@ persist_with: sandbox_default_datagroup
 explore: derived_test_base {}
 
 explore: users_extended {}
+
+explore: test {
+  from: users
+
+  join: user_data {
+    sql_on: ${user_data.user_id} = ${test.id} ;;
+    relationship: one_to_one
+  }
+
+}
 
 
 explore: events {

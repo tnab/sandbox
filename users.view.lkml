@@ -32,6 +32,47 @@ view: users {
     sql: ${TABLE}.country ;;
   }
 
+  dimension: or_test_case {
+    alpha_sort: yes
+    type: string
+    case: {
+      when: {
+        sql:${TABLE}.city = "Agency"
+          OR  ${TABLE}.city = "Addis";;
+        label: "test_successful"
+      }
+      else: "nope"
+    }
+  }
+
+  dimension: sql_test_case {
+    type: string
+    sql:
+    CASE
+    WHEN ${TABLE}.city = "Agency" THEN "test_successful"
+    WHEN ${TABLE}.city = "Addis" THEN "test_successful"
+    ELSE "nope"
+    END
+    ;;
+  }
+
+  dimension: failed_case_test {
+    type: string
+    case: {
+      when: {
+        sql:${TABLE}.city = "Agency"  ;;
+        label: "test_successful"
+      }
+      when: {
+        sql:${TABLE}.city = "Addis"  ;;
+        label: "test_successful"
+      }
+      else: "nope"
+    }
+  }
+
+
+
   dimension_group: created {
     type: time
     timeframes: [
@@ -164,7 +205,7 @@ view: users {
     sql: ${age} ;;
   }
 
-  # ----- Sets of fields for drilling ------
+# ----- Sets of fields for drilling ------
   set: detail {
     fields: [
       id,
