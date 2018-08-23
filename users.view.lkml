@@ -1,6 +1,7 @@
 view: users {
   sql_table_name: demo_db.users ;;
 
+
   dimension: id {
     primary_key: yes
     type: number
@@ -15,6 +16,11 @@ view: users {
   dimension: 24test {
     type: number
     sql: ${TABLE}.age ;;
+  }
+
+  dimension: test {
+    type: string
+    sql: "test_succeeded" ;;
   }
 
   dimension: foo_explore_name {
