@@ -2,6 +2,7 @@ connection: "thelook"
 
 # include all the views
 include: "*.view"
+include: "test.lkml"
 # include: "datagroup_test.model"
 # include all the dashboards
 # include: "*.dashboard"
