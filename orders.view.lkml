@@ -27,6 +27,29 @@ view: orders {
     sql: ${TABLE}.status ;;
   }
 
+  dimension: meta__form_id {
+    type: string
+    sql: ${TABLE}.status ;;
+    description: "meta formid from commcare"
+    label: "1. Form ID"
+
+#     link: {
+#       label: "See in Commcare"
+#       url: "https://ec2-18-232-113-228.compute-1.amazonaws.com:9999/looks/2"
+#       icon_url: "https://dnwn0mt1jqwp0.cloudfront.net/static/hqwebapp/images/favicon.png?version=bd1fede"
+#     }
+
+    link: {
+      label: "{{ orders.status._value }}"
+      url:"
+      {% if orders.status._value == 'pending' %}
+      https://ec2-18-232-113-228.compute-1.amazonaws.com:9999/looks/10
+      {% else %}
+      No valid link
+      {% endif %}"
+    }
+  }
+
   dimension: status_fomratted_ticket {
     sql: ${TABLE}.status ;;
     html:
