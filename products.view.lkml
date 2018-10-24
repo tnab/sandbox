@@ -42,6 +42,30 @@ view: products {
     sql: ${TABLE}.sku ;;
   }
 
+#   dimension: test_division {
+#     type: number
+#     sql: ${test_sum}/${test_running} ;;
+#     value_format_name: usd
+#   }
+
+  measure: test_div_measure {
+    type: number
+    sql: ${test_sum}/${test_running} ;;
+    value_format_name: usd
+  }
+
+  measure: test_running {
+    type: running_total
+    sql: ${retail_price} ;;
+    value_format_name: usd
+  }
+
+  measure: test_sum {
+    type: sum
+    sql: ${retail_price} ;;
+    value_format_name: usd
+  }
+
   measure: count {
     type: count
     drill_fields: [id, item_name, inventory_items.count]

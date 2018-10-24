@@ -1,4 +1,4 @@
-view: users {
+view: buckets {
   sql_table_name: demo_db.users ;;
 
 
@@ -25,28 +25,23 @@ view: users {
 #       * {% parameter age_tier_bucket_size %} ;;
 #   }
 
-# dimension: day_number {
-#   type:
-# }
 
-
-
-# # 10 Equal Buckets
+# 10 Equal Buckets
   parameter: bucket_number{
     type: number
   }
-#
-#   dimension: bucket_age_step {
-#     type: number
-#     sql: TRUNCATE(${bucket_size.range}/ {% parameter bucket_number %}, 0)
-#     ;;
-#   }
-#
-#   dimension: bucket_age_tier {
-#     type: number
-#     sql: TRUNCATE(${age}/ ${bucket_age_step},0) * ${bucket_age_step} ;;
-#   }
-#
+
+  dimension: bucket_age_step {
+    type: number
+    sql: TRUNCATE(${bucket_size.range}/ {% parameter bucket_number %}, 0)
+    ;;
+  }
+
+  dimension: bucket_age_tier {
+    type: number
+    sql: TRUNCATE(${age}/ ${bucket_age_step},0) * ${bucket_age_step} ;;
+  }
+
   measure: max_test {
     type: max
     sql: ${TABLE}.age ;;
@@ -72,56 +67,17 @@ view: users {
     sql: users ;;
   }
 
+  dimension: city {
+    type: string
+    sql: ${TABLE}.city ;;
+  }
+
   dimension: country {
     type: string
     map_layer_name: countries
     sql: ${TABLE}.country ;;
-    link: {
-      label: "State"
-      url: "/dashboards/4?Country={{ value }}"
-    }
   }
 
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-    link: {
-      label: "City"
-      url: "/dashboards/5?Country={{ _filters['users.country'] | url_encode }}
-      &State={{ value }}
-      "
-    }
-  }
-
-  dimension: city {
-    type: string
-    sql: ${TABLE}.city ;;
-    link: {
-      label: "Zip"
-      url: "/dashboards/6?City={{ value }}
-      &State={{  _filters['users.state'] | url_encode  }}
-      &&Country={{  _filters['users.country'] | url_encode  }}
-      "
-    }
-  }
-
-  dimension: zip {
-    type: zipcode
-    sql: ${TABLE}.zip ;;
-  }
-
-
-  dimension: data_type_suzanne {
-    type: string
-    sql: ${TABLE}.DATA_TYPE__C ;;
-    link: {
-      label: "Explore '{{value}}' by Root Cause"
-      url: "/dashboards/506?Data%20Type={{value}}
-      &Issue%20Type={{_filters['sf_issue_management__c.issue_type__c'] | url_encode }}
-      &Date={{_filters['sf_issue_management__c.submit_date__c_date'] | url_encode }}
-      &Affected%20Data%20Asset={{_filters['sf_issue_management__c.di_process_type__c'] | url_encode }}"
-    }
-  }
   dimension: or_test_case {
     alpha_sort: yes
     type: string
@@ -207,6 +163,16 @@ view: users {
     sql: ${TABLE}.last_name ;;
   }
 
+  dimension: state {
+    type: string
+    sql: ${TABLE}.state ;;
+  }
+
+  dimension: zip {
+    type: zipcode
+    sql: ${TABLE}.zip ;;
+  }
+
   dimension: is_before_ytd {
     type: yesno
     sql:
@@ -279,7 +245,6 @@ view: users {
   measure: count {
     type: count
     drill_fields: [detail*]
-    value_format: "*00#"
   }
 
   measure: count_di {

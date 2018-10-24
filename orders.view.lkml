@@ -13,6 +13,8 @@ view: orders {
       raw,
       time,
       date,
+      day_of_week,
+      day_of_week_index,
       week,
       month,
       quarter,
@@ -25,6 +27,17 @@ view: orders {
   dimension: status {
     type: string
     sql: ${TABLE}.status ;;
+  }
+
+  measure: latest_date {
+    type: date
+    sql: max(${created_date}) ;;
+
+  }
+
+  measure: count_distinct {
+    type: count_distinct
+    sql: ${status};;
   }
 
   dimension: test_view {
