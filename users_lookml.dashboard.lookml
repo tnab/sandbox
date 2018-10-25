@@ -51,8 +51,8 @@
     conditional_formatting_include_totals: false
     conditional_formatting_include_nulls: false
     series_types: {}
-    listen:
-      test_number: users.city
+#     listen:
+#       test_number: users.city
     row: 9
     col: 0
     width: 13
@@ -200,8 +200,8 @@
     conditional_formatting_include_totals: false
     conditional_formatting_include_nulls: false
     series_types: {}
-    listen:
-      test_number: users.email
+#     listen:
+#       test_number: users.email
     row: 0
     col: 0
     width: 24
@@ -318,79 +318,79 @@
     col: 0
     width: 8
     height: 6
-  - name: Top 25 Users by State and Gender
-    title: Top 25 Users by State and Gender
-    model: sandbox
-    explore: user_data
-    type: looker_column
-    fields:
-    - users.count
-    - users.gender
-    - users.city
-    pivots:
-    - users.gender
-    sorts:
-    - users.count desc 0
-    - users.gender
-    limit: 25
-    dynamic_fields:
-    - table_calculation: calculation_1
-      label: Calculation 1
-      expression: "${users.count}*2"
-      value_format:
-      value_format_name:
-      _kind_hint: measure
-      _type_hint: number
-    query_timezone: America/Los_Angeles
-    stacking: ''
-    show_value_labels: false
-    label_density: 25
-    legend_position: center
-    x_axis_gridlines: false
-    y_axis_gridlines: true
-    show_view_names: true
-    limit_displayed_rows: false
-    y_axis_combined: true
-    show_y_axis_labels: true
-    show_y_axis_ticks: true
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
-    show_x_axis_label: true
-    show_x_axis_ticks: true
-    x_axis_scale: auto
-    y_axis_scale_mode: linear
-    x_axis_reversed: false
-    y_axis_reversed: false
-    ordering: none
-    show_null_labels: false
-    show_totals_labels: false
-    show_silhouette: false
-    totals_color: "#808080"
-    value_labels: legend
-    label_type: labPer
-    show_null_points: true
-    point_style: circle
-    show_row_numbers: true
-    truncate_column_names: false
-    hide_totals: false
-    hide_row_totals: false
-    table_theme: editable
-    enable_conditional_formatting: false
-    conditional_formatting_include_totals: false
-    conditional_formatting_include_nulls: false
-    series_types: {}
-    row: 9
-    col: 13
-    width: 11
-    height: 6
-  filters:
-  - name: test_number
-    title: test_number
-    type: field_filter
-    default_value: "{{ _user_attributes['first_name'] }}"
-    allow_multiple_values: false
-    required: true
-    model: sandbox
-    explore: users
-    listens_to_filters: []
-    field: users.email
+#   - name: Top 25 Users by State and Gender
+#     title: Top 25 Users by State and Gender
+#     model: sandbox
+#     explore: user_data
+#     type: looker_column
+#     fields:
+#     - users.count
+#     - users.gender
+#     - users.city
+#     pivots:
+#     - users.gender
+#     sorts:
+#     - users.count desc 0
+#     - users.gender
+#     limit: 25
+#     dynamic_fields:
+#     - table_calculation: calculation_1
+#       label: Calculation 1
+#       expression: "${users.count}*2"
+#       value_format:
+#       value_format_name:
+#       _kind_hint: measure
+#       _type_hint: number
+#     query_timezone: America/Los_Angeles
+#     stacking: ''
+#     show_value_labels: false
+#     label_density: 25
+#     legend_position: center
+#     x_axis_gridlines: false
+#     y_axis_gridlines: true
+#     show_view_names: true
+#     limit_displayed_rows: false
+#     y_axis_combined: true
+#     show_y_axis_labels: true
+#     show_y_axis_ticks: true
+#     y_axis_tick_density: default
+#     y_axis_tick_density_custom: 5
+#     show_x_axis_label: true
+#     show_x_axis_ticks: true
+#     x_axis_scale: auto
+#     y_axis_scale_mode: linear
+#     x_axis_reversed: false
+#     y_axis_reversed: false
+#     ordering: none
+#     show_null_labels: false
+#     show_totals_labels: false
+#     show_silhouette: false
+#     totals_color: "#808080"
+#     value_labels: legend
+#     label_type: labPer
+#     show_null_points: true
+#     point_style: circle
+#     show_row_numbers: true
+#     truncate_column_names: false
+#     hide_totals: false
+#     hide_row_totals: false
+#     table_theme: editable
+#     enable_conditional_formatting: false
+#     conditional_formatting_include_totals: false
+#     conditional_formatting_include_nulls: false
+#     series_types: {}
+#     row: 9
+#     col: 13
+#     width: 11
+#     height: 6
+#   filters:
+#   - name: test_number
+#     title: test_number
+#     type: field_filter
+#     default_value: "{{ _user_attributes['first_name'] }}"
+#     allow_multiple_values: false
+#     required: true
+#     model: sandbox
+#     explore: users
+#     listens_to_filters: []
+#     field: users.email

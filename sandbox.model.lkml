@@ -5,7 +5,7 @@ include: "*.view"
 include: "test.lkml"
 # include: "datagroup_test.model"
 # include all the dashboards
-# include: "*.dashboard.lookml"
+include: "users_lookml.dashboard.lookml"
 
 datagroup: sandbox_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;
