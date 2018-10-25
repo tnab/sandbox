@@ -92,6 +92,17 @@ explore: orders {
     sql_on: ${orders.user_id} = ${others.id} ;;
     relationship: many_to_one
   }
+
+  join: order_items {
+    sql_on: ${order_items.order_id} = ${orders.id} ;;
+    relationship: one_to_many
+  }
+
+  join: 7days {
+    from: orders
+    sql_on: date_sub(${7days.created_date}, interval 7 day) = ${orders.created_date} ;;
+    relationship: many_to_many
+  }
 }
 
 explore: products {}

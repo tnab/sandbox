@@ -154,8 +154,78 @@ view: orders {
     {% endif %}
 ;;
   }
+###################################################
+# Warby Parker test
+
+  filter: date_filter {
+    type: date
+  }
+
+  dimension: test_date {
+    type: date
+    sql: date_sub(curdate(), interval 7 day) ;;
+}
+
+dimension: sale_price {
+  type: number
+  sql: ${order_items.sale_price} ;;
+}
+
+  dimension: size_date {
+    type: date
+    suggestions: ["7 days","30 days","90 days"]
+    sql: CASE WHEN {% condition %} "7 days" {% endcondition %} THEN date_sub(${created_date}, interval 7 day)
+          WHEN {% condition %} "30 days" {% endcondition %} THEN date_sub(${created_date}, interval 30 day)
+          WHEN {% condition %} "90 days" {% endcondition %} THEN date_sub(${created_date}, interval 90 day)
+          ;;
+  }
+
+  dimension: start_date_size {
+    type: number
+    sql: case when ${created_date} = {% date_start date_filter %} then ${order_items.sale_price} end ;;
+  }
+  dimension: end_date_size {
+    type: number
+    sql: case when ${created_date} = {% date_end date_filter %} then ${order_items.sale_price} end ;;
+  }
+
+#   dimension: date_7_days_ago {
+#     type: date
+#     sql: date_sub(curdate(), interval 7 day) ;;
+#   }
+#
+  dimension: size_7_days_ago {
+    type: number
+    sql: case when ${created_date} = date_sub(curdate(), interval 7 day) then ${order_items.sale_price} end;;
+  }
+
+#   dimension: date_30_days_ago {
+#     type: date
+#     sql: date_sub(curdate(), interval 30 day) ;;
+#   }
+
+  dimension: size_30_days_ago {
+    type: number
+    sql: case when ${created_date} = date_sub(curdate(), interval 30 day) then ${order_items.sale_price} end;;
+  }
+
+#   dimension: date_90_days_ago {
+#     type: date
+#     sql: date_sub(curdate(), interval 90 day) ;;
+#   }
+
+  dimension: size_90_days_ago {
+    type: number
+    sql: case when ${created_date} = date_sub(curdate(), interval 90 day) then ${order_items.sale_price} end;;
+  }
 
 
+
+
+  dimension: size_diff {
+    type: number
+    sql: ${start_date_size}  - ${end_date_size};;
+  }
 
   dimension: user_id {
     type: number

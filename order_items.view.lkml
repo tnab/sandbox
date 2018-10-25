@@ -33,7 +33,6 @@ view: order_items {
     sql: ${TABLE}.returned_at ;;
   }
 
-
   dimension: liquid_test {
     type: string
     sql: null;;
