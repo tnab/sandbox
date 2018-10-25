@@ -40,6 +40,15 @@ view: orders {
     sql: ${status};;
   }
 
+  measure: test_sum {
+    type: sum
+    sql: ${sale_price} ;;
+    filters: {
+      field: created_date
+      value: "this week"
+    }
+  }
+
   dimension: test_view {
     type: string
     sql: 'test' ;;
