@@ -3,6 +3,7 @@ view: orders {
 
   dimension: id {
     primary_key: yes
+    label: "{% if _view._name == 'billing' %} Billing {% else %} Shipping {% endif %}"
     type: number
     sql: ${TABLE}.id ;;
   }
@@ -178,6 +179,11 @@ view: orders {
 dimension: sale_price {
   type: number
   sql: ${order_items.sale_price} ;;
+}
+
+measure: max_sale_price {
+  type: max
+  sql: ${sale_price} ;;
 }
 
   dimension: size_date {

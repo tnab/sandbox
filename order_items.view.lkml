@@ -30,13 +30,30 @@ view: order_items {
       quarter,
       year
     ]
-    sql: ${TABLE}.returned_at ;;
+    sql: ${TABLE}.returned_at
+    ;;
   }
+
+  # sql:CASE WHEN ${TABLE}.returned_at IS NOT NULL
+  # THEN ${TABLE}.returned_at
+  # ELSE 0 END ;;
 
   dimension: liquid_test {
     type: string
     sql: null;;
 
+  }
+
+  dimension: drillable_number {
+    type: number
+    sql: ${sale_price};;
+    html: <a href="https://ec2-18-232-113-228.compute-1.amazonaws.com:9999/explore/sandbox/order_items?qid=VESmyvu5DobjgTwsJS9trI&toggle=vis">{{ value }}</a> ;;
+  }
+
+
+  dimension: one_date {
+    type: date
+    sql: '2018-10-22' ;;
   }
 
   dimension: returned {
@@ -49,6 +66,7 @@ view: order_items {
   dimension: sale_price {
     type: number
     sql: ${TABLE}.sale_price ;;
+    value_format: "\"£\"0.00"
   }
 
   measure: total_sale {
@@ -177,6 +195,15 @@ view: order_items {
     }
     drill_fields: [details*]
     value_format: "0.##"
+  }
+
+  measure: filtere_oi_count {
+    type: count
+
+    filters: {
+    field: returned_date
+    value: "0 days ago for 14 days"
+    }
   }
 
 

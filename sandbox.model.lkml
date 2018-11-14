@@ -3,20 +3,23 @@ connection: "thelook"
 # include all the views
 include: "*.view"
 include: "test.lkml"
-# include: "datagroup_test.model"
 # include all the dashboards
-include: "test_dash.dashboard.lookml"
+# include: "test_dash.dashboard.lookml"
 
-datagroup: sandbox_default_datagroup {
-  # sql_trigger: SELECT MAX(id) FROM etl_log;;
-  max_cache_age: "1 hour"
+datagroup: the_looker_etl {
+  sql_trigger: SELECT MAX(users.created_at) FROM demo_db.users;;
+  max_cache_age: "48 hour"
 }
 
-persist_with: sandbox_default_datagroup
+persist_with: the_looker_etl
 
 explore: derived_test_base {}
 
 explore: users_extended {}
+
+explore: oi_test {
+  from: order_items
+}
 
 # explore: test {
 #   from: users
@@ -64,9 +67,18 @@ explore: order_items {
 
   join: orders {
     type: left_outer
+    view_label: "test"
     sql_on: ${order_items.order_id} = ${orders.id} ;;
     relationship: many_to_one
   }
+
+#   join: test {
+#     from: orders
+#     view_label: "test"
+#     type: left_outer
+#     relationship:
+#     sql_on:    sql_on: ${order_items.order_id} = ${orders.id}  ;;
+#   }
 
   join: products {
     type: left_outer
@@ -79,6 +91,7 @@ explore: order_items {
     sql_on: ${orders.user_id} = ${users.id} AND ${users.id}  ;;
     relationship: many_to_one
   }
+
 }
 
 explore: orders {

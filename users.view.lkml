@@ -14,22 +14,31 @@ view: users {
   }
 
 
-# Tiers using division
-#   parameter: age_tier_bucket_size {
-#     type: number
-#   }
-#
-#   dimension: dynamic_age_tier {
-#     type: number
-#     sql: TRUNCATE(${TABLE}.age / {% parameter age_tier_bucket_size %}, 0)
-#       * {% parameter age_tier_bucket_size %} ;;
-#   }
+filter: liq_test {
+  type: string
+  suggestions: ["id"]
+}
 
-# dimension: day_number {
-#   type:
-# }
+dimension: in_range {
+  type:  yesno
+  sql: DATEDIFF(${end_date},${created_date}) < 15   ;;
+}
 
 
+dimension: end_date {
+  type:  date
+  sql: DATE_ADD(${created_date}, interval 14 day)  ;;
+}
+
+measure: filtered_count {
+  type: count
+
+  filters: {
+    field: created_date
+    value: "0 days ago for 14 days"
+  }
+
+}
 
 # # 10 Equal Buckets
   parameter: bucket_number{
@@ -208,6 +217,7 @@ view: users {
   }
 
   dimension: is_before_ytd {
+    label: "test_test"
     type: yesno
     sql:
       (DAYOFYEAR(${created_time}) < DAYOFYEAR(CURRENT_TIMESTAMP)
@@ -279,7 +289,7 @@ view: users {
   measure: count {
     type: count
     drill_fields: [detail*]
-    value_format: "*00#"
+    # value_format: "*00#"
   }
 
   measure: count_di {
