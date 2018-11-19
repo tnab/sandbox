@@ -21,6 +21,8 @@ explore: oi_test {
   from: order_items
 }
 
+explore: user_facts {}
+
 # explore: test {
 #   from: users
 #

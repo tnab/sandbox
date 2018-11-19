@@ -13,7 +13,6 @@ view: users {
     sql: ${TABLE}.age ;;
   }
 
-
 filter: liq_test {
   type: string
   suggestions: ["id"]
