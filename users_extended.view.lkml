@@ -1,7 +1,7 @@
-include: "users.view.lkml"
-
-view: users_extended {
-extends: [users]
-
-
- }
+# include: "users.view.lkml"
+#
+# view: users_extended {
+# extends: [users]
+#
+#
+#  }

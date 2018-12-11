@@ -8,36 +8,81 @@ view: users {
     sql: ${TABLE}.id ;;
   }
 
+#   dimension: id_test {
+#     type: number
+#     sql:
+#         {% if _explore._name == 'users' %} ${TABLE}.id +1
+#     {% else %} ${TABLE}.id + 2
+#     {% endif %}
+#     ;;
+#   }
+
+  dimension: second_test {
+    type: number
+    sql:
+        {% if user_facts.SQL_TABLE_NAME.id %} ${TABLE}.id +1
+    {% else %} ${TABLE}.id + 2
+    {% endif %}
+    ;;
+  }
+
+  dimension: test_tag {
+    type: string
+    sql: "{{ _user_attributes['limit_view'] }}" ;;
+  }
+
+
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
   }
 
-filter: liq_test {
-  type: string
-  suggestions: ["id"]
-}
-
-dimension: in_range {
-  type:  yesno
-  sql: DATEDIFF(${end_date},${created_date}) < 15   ;;
-}
-
-
-dimension: end_date {
-  type:  date
-  sql: DATE_ADD(${created_date}, interval 14 day)  ;;
-}
-
-measure: filtered_count {
-  type: count
-
-  filters: {
-    field: created_date
-    value: "0 days ago for 14 days"
+  filter: liq_test {
+    type: string
+    suggestions: ["id"]
   }
 
-}
+  parameter: in_btwn {
+    type: number
+  }
+
+  filter: date_filter {
+    type: date_time
+  }
+
+  dimension: liquid_test {
+    type: string
+    sql:
+    {% if _explore._name == 'users' %} "Users Worked"
+    {% else %} "Other Views" {% endif %}
+    ;;
+  }
+
+  dimension: nb_weeks {
+    type: number
+    sql: DATEDIFF({% date_end date_filter %}, {% date_start date_filter %})/7.0 ;;
+  }
+
+  dimension: in_range {
+    type:  yesno
+    sql: DATEDIFF(${end_date},${created_date}) < 15   ;;
+  }
+
+
+  dimension: end_date {
+    type:  date
+    sql: DATE_ADD(${created_date}, interval 14 day)  ;;
+  }
+
+  measure: filtered_count {
+    type: count
+
+    filters: {
+      field: is_before_ytd
+      value: "Yes"
+    }
+
+  }
 
 # # 10 Equal Buckets
   parameter: bucket_number{
@@ -88,6 +133,7 @@ measure: filtered_count {
       label: "State"
       url: "/dashboards/4?Country={{ value }}"
     }
+    drill_fields: [time_drill*]
   }
 
   dimension: state {
@@ -99,6 +145,7 @@ measure: filtered_count {
       &State={{ value }}
       "
     }
+    drill_fields: [time_drill*]
   }
 
   dimension: city {
@@ -116,6 +163,7 @@ measure: filtered_count {
   dimension: zip {
     type: zipcode
     sql: ${TABLE}.zip ;;
+    html:  <font color="blue">{{rendered_value}}</font> ;;
   }
 
 
@@ -171,6 +219,7 @@ measure: filtered_count {
 
   dimension_group: created {
     type: time
+    datatype: datetime
     timeframes: [
       raw,
       time,
@@ -188,6 +237,7 @@ measure: filtered_count {
       year
     ]
     sql: ${TABLE}.created_at ;;
+    drill_fields: [time_drill*]
   }
 
   dimension: date_test {
@@ -203,6 +253,7 @@ measure: filtered_count {
   dimension: first_name {
     type: string
     sql: ${TABLE}.first_name ;;
+    html: <font face="Arial" color="green">{{value}}</font> ;;
   }
 
   dimension: gender {
@@ -291,15 +342,23 @@ measure: filtered_count {
     # value_format: "*00#"
   }
 
-  measure: count_di {
+  measure: count_formatted {
     type: count_distinct
     sql: ${id} ;;
     filters: {
       field: id
       value: ">20"
     }
+    html: <font color="red">{{ rendered_value | replace: '.', 'µ' | replace: ',','-' | replace: 'µ', ','}}</font>;;
   }
 
+  measure: count_foo {
+    type: count
+    filters: {
+      field: id
+      value: "0" # use "NOT NULL" if this is a number field
+    }
+  }
   dimension: age_groups {
     type: tier
     tiers: [0, 18, 30, 60]
@@ -307,12 +366,48 @@ measure: filtered_count {
     sql: ${age} ;;
   }
 
+# dimension: tag {
+#   type: string
+#   sql: CASE
+#   WHEN coun
+
+#   ;;
+# }
+
+  measure: max_date {
+    type: date
+    sql: MAX(${created_raw});;
+    drill_fields: [time_drill*]
+  }
+
+  measure: count_even {
+    type: sum
+    sql: CASE WHEN MOD(${age},2) = 0 THEN 1 ELSE 0 END ;;
+  }
+
+  measure: count_odd{
+    type: sum
+    sql: CASE WHEN MOD(${age},2) = 0 THEN 1 ELSE 0 END ;;
+  }
+
+
 # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
       id,
       first_name,
-      last_name
+      last_name,
+      email,
+      max_date
+    ]
+  }
+
+  set: time_drill {
+    fields: [
+      created_minute,
+      created_month,
+      created_week,
+      created_time
     ]
   }
 }
