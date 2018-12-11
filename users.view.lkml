@@ -17,14 +17,14 @@ view: users {
 #     ;;
 #   }
 
-  dimension: second_test {
-    type: number
-    sql:
-        {% if user_facts.SQL_TABLE_NAME.id %} ${TABLE}.id +1
-    {% else %} ${TABLE}.id + 2
-    {% endif %}
-    ;;
-  }
+  # dimension: second_test {
+  #   type: number
+  #   sql:
+  #       {% if user_facts.SQL_TABLE_NAME.id %} ${TABLE}.id +1
+  #   {% else %} ${TABLE}.id + 2
+  #   {% endif %}
+  #   ;;
+  # }
 
   dimension: test_tag {
     type: string
