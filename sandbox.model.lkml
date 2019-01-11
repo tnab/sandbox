@@ -4,7 +4,7 @@ connection: "thelook"
 include: "*.view"
 include: "test.lkml"
 # include all the dashboards
-# include: "*.dashboard.lookml"
+include: "*.dashboard.lookml"
 
 datagroup: the_looker_etl {
   sql_trigger: SELECT MAX(users.created_at) FROM demo_db.users;;
