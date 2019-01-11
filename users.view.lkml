@@ -8,6 +8,29 @@ view: users {
     sql: ${TABLE}.id ;;
   }
 
+  filter: a_b_gender {}
+
+  dimension: a_b {
+    type: yesno
+    sql:
+    {%condition a_b_gender %} ${gender} {% endcondition %};;
+    }
+
+#   dimension: case_test {
+#     type: number
+#     case: {
+#       when: {
+#         sql: mod(${id},2) = 0 ;;
+#         label: "even"
+#       }
+#       when: {
+#         sql: mode(${id},2) = 1 ;;
+#         label: "odd"
+#       }
+#       else: "what the hell kind of number is this?"
+#     }
+#   }
+
 #   dimension: id_test {
 #     type: number
 #     sql:
@@ -37,8 +60,14 @@ view: users {
     sql: ${TABLE}.age ;;
   }
 
-  filter: liq_test {
+  dimension: test_html {
     type: string
+    sql: 1 ;;
+    html: <a href="http://www.yahoo.com"><img src="img_chania.jpg" alt="Flowers in Chania"> </a> ;;
+  }
+
+  filter: liq_test {
+    type: number
     suggestions: ["id"]
   }
 
@@ -83,6 +112,10 @@ view: users {
     }
 
   }
+
+parameter: jon {
+  type: string
+}
 
 # # 10 Equal Buckets
   parameter: bucket_number{
@@ -234,6 +267,7 @@ view: users {
       month,
       month_num,
       quarter,
+      quarter_of_year,
       year
     ]
     sql: ${TABLE}.created_at ;;
@@ -374,6 +408,7 @@ view: users {
 #   ;;
 # }
 
+
   measure: max_date {
     type: date
     sql: MAX(${created_raw});;
@@ -388,6 +423,15 @@ view: users {
   measure: count_odd{
     type: sum
     sql: CASE WHEN MOD(${age},2) = 0 THEN 1 ELSE 0 END ;;
+  }
+
+  measure: filt {
+    type: count
+
+    filters: {
+      field: created_date
+      value: "this year"
+    }
   }
 
 

@@ -19,6 +19,7 @@ view: user_facts{
         ON u.id = o.user_id
         JOIN demo_db.order_items oi
         ON oi.order_id = o.id
+        WHERE u.id = COALESCE ({% parameter p_filter_field %}, u.id)
         GROUP BY 1  ;;
   }
 
@@ -33,6 +34,18 @@ view: user_facts{
         # JOIN demo_db.order_items oi
         # ON oi.order_id = o.id
         # {% endif %}
+
+# Test parameters
+
+parameter: p_filter_field {
+  type: number
+}
+
+filter: filter_field {
+  type: string
+}
+
+
 
 # Define your dimensions and measures here, like this:
   dimension: user_id {
