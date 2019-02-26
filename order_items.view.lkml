@@ -20,9 +20,11 @@ view: order_items {
   }
 
   dimension_group: returned {
+    label: "test_label"
     type: time
     timeframes: [
       raw,
+      yesno,
       time,
       date,
       week,
@@ -56,12 +58,12 @@ view: order_items {
     sql: '2018-10-22' ;;
   }
 
-  dimension: returned {
-    # label: "{% if order_items.liquid_test is null %} worked {% else %} did not work {% endif %}"
-    type: yesno
-    sql: ${returned_date} is not null ;;
-
-  }
+#   dimension: returned {
+#     # label: "{% if order_items.liquid_test is null %} worked {% else %} did not work {% endif %}"
+#     type: yesno
+#     sql: ${returned_date} is not null ;;
+#
+#   }
 
   dimension: sale_price {
     type: number
@@ -73,10 +75,10 @@ view: order_items {
 
   }
 
-  measure: count_d {
-    type: count_distinct
-    sql: ${returned_date} IS NULL  ;;
-  }
+#   measure: count_d {
+#     type: count_distinct
+#     sql: ${returned_date} IS NULL  ;;
+#   }
 
   measure: count {
     type: count
@@ -158,6 +160,13 @@ view: order_items {
   }
 
 # Sum after a date test
+
+dimension_group: test_label {
+  type: duration
+  sql_start: ${returned_date} ;;
+  sql_end: ${test_date} ;;
+
+}
 
   dimension_group: test {
     type: time

@@ -2,6 +2,7 @@ view: user_facts{
   derived_table: {
     sql:  SELECT
             user_id as user_id
+            , state AS state
             , CASE WHEN user_id = 1 THEN NULL ELSE user_id END AS test_id
             , COUNT(o.id) as user_lifetime_orders
             , COUNT(oi.id) as user_lifetime_items
@@ -93,6 +94,11 @@ filter: filter_field {
     type: number
     sql: ${TABLE}.state_count ;;
     hidden: yes
+  }
+
+  dimension: state {
+    type: string
+    sql: ${TABLE}.state ;;
   }
 
   dimension: max_date {

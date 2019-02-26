@@ -8,13 +8,16 @@ view: users {
     sql: ${TABLE}.id ;;
   }
 
-  filter: a_b_gender {}
+  filter: a_b_gender {
+    type: string
+    sql: {% condition %}${gender}{% endcondition %} ;;
+  }
 
   dimension: a_b {
     type: yesno
     sql:
     {%condition a_b_gender %} ${gender} {% endcondition %};;
-    }
+  }
 
 #   dimension: case_test {
 #     type: number
@@ -92,10 +95,10 @@ view: users {
     sql: DATEDIFF({% date_end date_filter %}, {% date_start date_filter %})/7.0 ;;
   }
 
-  dimension: in_range {
-    type:  yesno
-    sql: DATEDIFF(${end_date},${created_date}) < 15   ;;
-  }
+#   dimension: in_range {
+#     type:  yesno
+#     sql: DATEDIFF(${end_date},${created_date}) < 15   ;;
+#   }
 
 
   dimension: end_date {
@@ -103,35 +106,37 @@ view: users {
     sql: DATE_ADD(${created_date}, interval 14 day)  ;;
   }
 
-  measure: filtered_count {
-    type: count
+#   measure: filtered_count {
+#     type: count
+#
+#     filters: {
+#       field: is_before_ytd
+#       value: "Yes"
+#     }
 
-    filters: {
-      field: is_before_ytd
-      value: "Yes"
-    }
+# }
 
+  parameter: jon {
+    type: date
   }
 
-parameter: jon {
-  type: string
-}
+
 
 # # 10 Equal Buckets
   parameter: bucket_number{
     type: number
   }
-#
-#   dimension: bucket_age_step {
-#     type: number
-#     sql: TRUNCATE(${bucket_size.range}/ {% parameter bucket_number %}, 0)
-#     ;;
-#   }
-#
-#   dimension: bucket_age_tier {
-#     type: number
-#     sql: TRUNCATE(${age}/ ${bucket_age_step},0) * ${bucket_age_step} ;;
-#   }
+
+  # dimension: bucket_age_step {
+  #   type: number
+  #   sql: TRUNCATE(${bucket_size.range}/ {% parameter bucket_number %}, 0)
+  #   ;;
+  # }
+
+  # dimension: bucket_age_tier {
+  #   type: number
+  #   sql: TRUNCATE(${age}/ ${bucket_age_step},0) * ${bucket_age_step} ;;
+  # }
 #
   measure: max_test {
     type: max
@@ -255,6 +260,7 @@ parameter: jon {
     datatype: datetime
     timeframes: [
       raw,
+      yesno,
       time,
       date,
       week,
@@ -275,13 +281,23 @@ parameter: jon {
   }
 
   dimension: date_test {
-    type: date
-    sql: ${TABLE}.created_at ;;
+    type: yesno
+    sql: {% parameter jon %} =  ${TABLE}.created_at  ;;
   }
 
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;
+  }
+
+
+  parameter: name_param {
+    type: string
+  }
+
+  dimension: matches_name {
+    type: yesno
+    sql: {% parameter name_param %} = ${first_name} ;;
   }
 
   dimension: first_name {
@@ -370,11 +386,15 @@ parameter: jon {
 #       AND
 #     ${created_day_of_week_index} <= DAYOFWEEK(CURRENT_TIMESTAMP)
 
-  measure: count {
-    type: count
-    drill_fields: [detail*]
-    # value_format: "*00#"
-  }
+#   measure: count {
+#     type: count
+#     # drill_fields: [detail*]
+#     link: {
+#       label: "State"
+#       url: "/dashboards/4?Country=USA"
+#     }
+#     # value_format: "*00#"
+#   }
 
   measure: count_formatted {
     type: count_distinct
@@ -435,23 +455,56 @@ parameter: jon {
   }
 
 
-# ----- Sets of fields for drilling ------
-  set: detail {
-    fields: [
-      id,
-      first_name,
-      last_name,
-      email,
-      max_date
-    ]
+#### testing
+
+  filter: range {
+    type: date
   }
 
-  set: time_drill {
-    fields: [
-      created_minute,
-      created_month,
-      created_week,
-      created_time
-    ]
+  dimension: in_range {
+    type: yesno
+    sql: {% condition in_range %} ${created_date} {%  endcondition %} ;;
   }
+
+
+  measure: count_plain {
+    type: count
+  }
+
+  measure: running {
+    type: running_total
+    sql:  ;;
+}
+
+measure: filtered_count {
+  type: count
+
+  filters: {
+    field: in_range
+    value: "yes"
+  }
+}
+
+
+
+# ----- Sets of fields for drilling ------
+set: detail {
+  fields: [
+    id,
+    first_name,
+    last_name,
+    email,
+    max_date
+  ]
+}
+
+set: time_drill {
+  fields: [
+    created_minute,
+    created_month,
+    created_week,
+    created_time
+  ]
+}
+
 }

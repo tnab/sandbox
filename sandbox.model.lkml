@@ -11,6 +11,8 @@ datagroup: the_looker_etl {
   max_cache_age: "48 hour"
 }
 
+# week_start_day: sunday
+
 persist_with: the_looker_etl
 
 explore: derived_test_base {}
@@ -93,11 +95,11 @@ explore: order_items {
     relationship: many_to_one
   }
 
-  join: users {
-    type: left_outer
-    sql_on: ${orders.user_id} = ${users.id} AND ${users.id}  ;;
-    relationship: many_to_one
-  }
+#   join: users {
+#     type: left_outer
+#     sql_on: ${orders.user_id} = ${users.id} AND ${users.id}  ;;
+#     relationship: many_to_one
+#   }
 
 }
 
@@ -106,23 +108,23 @@ explore: orders {
   #   field: orders.id
   #   user_attribute: clear
   # }
-  join: others {
-    from: users
-    type: left_outer
-    sql_on: ${orders.user_id} = ${others.id} ;;
-    relationship: many_to_one
-  }
-
+#   join: others {
+#     from: users
+#     type: left_outer
+#     sql_on: ${orders.user_id} = ${others.id} ;;
+#     relationship: many_to_one
+#   }
+#
   join: order_items {
     sql_on: ${order_items.order_id} = ${orders.id} ;;
     relationship: one_to_many
   }
 
-  join: 7days {
-    from: orders
-    sql_on: date_sub(${7days.created_date}, interval 7 day) = ${orders.created_date} ;;
-    relationship: many_to_many
-  }
+#   join: 7days {
+#     from: orders
+#     sql_on: date_sub(${7days.created_date}, interval 7 day) = ${orders.created_date} ;;
+#     relationship: many_to_many
+#   }
 }
 
 explore: products {}
