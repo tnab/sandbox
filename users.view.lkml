@@ -308,7 +308,7 @@ view: users {
 
   dimension: filtered_name {
     type: string
-    sql: ${first_name} = {% parameter matches_name %} ;;
+    sql: ${first_name} = {% parameter name_param %} ;;
   }
 
   dimension: gender {
