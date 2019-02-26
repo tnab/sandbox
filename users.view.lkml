@@ -308,7 +308,7 @@ view: users {
 
   dimension: filtered_name {
     type: string
-    sql: CASE WHEN {% parameter name_param %} = ${first_name}
+    sql: CASE WHEN {% parameter name_param %} != ${first_name}
          THEN  ${first_name}
           ELSE
           "nope"
