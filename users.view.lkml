@@ -306,6 +306,11 @@ view: users {
     html: <font face="Arial" color="green">{{value}}</font> ;;
   }
 
+  dimension: filtered_name {
+    type: string
+    sql: ${first_name} = {% parameter matches_name %} ;;
+  }
+
   dimension: gender {
     type: string
     sql: ${TABLE}.gender ;;
