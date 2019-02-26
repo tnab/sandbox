@@ -308,7 +308,11 @@ view: users {
 
   dimension: filtered_name {
     type: string
-    sql: ${first_name} = {% parameter name_param %} ;;
+    sql: CASE WHEN {% parameter name_param %} = ${first_name}
+          ${first_name}
+          ELSE
+          "nope"
+          END;;
   }
 
   dimension: gender {
