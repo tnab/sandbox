@@ -315,10 +315,19 @@ view: users {
           END;;
   }
 
+  dimension: gender_overriden {
+    type: string
+    sql: ${TABLE}.gender;;
+    html: <a href={{ users.gender._link }}> {{rendered_value}} </a>;;
+  }
+
   dimension: gender {
     type: string
     sql: ${TABLE}.gender ;;
-    html: <a href="https://ec2-18-232-113-228.compute-1.amazonaws.com:9999/explore/sandbox/users?qid=gO8p0qM7R1eapT3mJjPBy3" target="_self">Open Drill Modal</a>;;
+    link: {
+      label: "link testing"
+      url:"/looks/10"
+    }
   }
 
   dimension: last_name {
