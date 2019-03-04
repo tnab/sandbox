@@ -318,6 +318,7 @@ view: users {
   dimension: gender {
     type: string
     sql: ${TABLE}.gender ;;
+    html: <a href="https://ec2-18-232-113-228.compute-1.amazonaws.com:9999/explore/sandbox/users?qid=gO8p0qM7R1eapT3mJjPBy3" target="_self">Open Drill Modal</a>;;
   }
 
   dimension: last_name {
@@ -395,15 +396,15 @@ view: users {
 #       AND
 #     ${created_day_of_week_index} <= DAYOFWEEK(CURRENT_TIMESTAMP)
 
-#   measure: count {
-#     type: count
-#     # drill_fields: [detail*]
-#     link: {
-#       label: "State"
-#       url: "/dashboards/4?Country=USA"
-#     }
-#     # value_format: "*00#"
-#   }
+  measure: count {
+    type: count
+    # drill_fields: [detail*]
+    link: {
+      label: "State"
+      url: "/dashboards/4?Country=USA"
+    }
+    # value_format: "*00#"
+  }
 
   measure: count_formatted {
     type: count_distinct
