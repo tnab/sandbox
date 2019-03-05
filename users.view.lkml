@@ -318,16 +318,22 @@ view: users {
   dimension: gender_overriden {
     type: string
     sql: ${TABLE}.gender;;
-    html: <a href={{ users.gender._link }}> {{rendered_value}} </a>;;
+    link: {
+      label: "‘Test Link’"
+      url: "{{ users.gender._link }}"
+      icon_url: "http://www.looker.com/favicon.ico"
+    }
   }
 
   dimension: gender {
     type: string
     sql: ${TABLE}.gender ;;
-    link: {
-      label: "link testing"
-      url:"/looks/10"
-    }
+#     link: {
+#       label: "link testing"
+#       url:"/looks/10"
+#     }
+
+    drill_fields: [detail*]
   }
 
   dimension: last_name {
@@ -408,11 +414,12 @@ view: users {
   measure: count {
     type: count
     # drill_fields: [detail*]
-    link: {
-      label: "State"
-      url: "/dashboards/4?Country=USA"
-    }
+#     link: {
+#       label: "State"
+#       url: "/dashboards/4?Country=USA"
+#     }
     # value_format: "*00#"
+    drill_fields: [detail*]
   }
 
   measure: count_formatted {
@@ -457,6 +464,8 @@ view: users {
   measure: count_even {
     type: sum
     sql: CASE WHEN MOD(${age},2) = 0 THEN 1 ELSE 0 END ;;
+
+    drill_fields: [detail*]
   }
 
   measure: count_odd{
@@ -502,6 +511,14 @@ measure: filtered_count {
     field: in_range
     value: "yes"
   }
+
+  link: {
+    label: "‘Test Link’"
+    url: "{{ users.count_even._link }}"
+    icon_url: "http://www.looker.com/favicon.ico"
+  }
+
+#   html: <a href={{ users.count_even._link }}> {{rendered_value}} </a>;;
 }
 
 
@@ -509,12 +526,11 @@ measure: filtered_count {
 # ----- Sets of fields for drilling ------
 set: detail {
   fields: [
-    id,
-    first_name,
-    last_name,
-    email,
-    max_date
-  ]
+#     id,
+#     first_name,
+#     last_name,
+  email
+]
 }
 
 set: time_drill {
