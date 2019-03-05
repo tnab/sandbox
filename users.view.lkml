@@ -317,7 +317,7 @@ view: users {
 
   dimension: gender_overriden {
     type: string
-    sql: ${TABLE}.gender;;
+    sql: ${gender};;
     link: {
       label: "Test Link"
       url: "{{ users.gender._link }}"
