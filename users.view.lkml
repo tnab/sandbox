@@ -319,7 +319,7 @@ view: users {
     type: string
     sql: ${TABLE}.gender;;
     link: {
-      label: "‘Test Link’"
+      label: "Test Link"
       url: "{{ users.gender._link }}"
       icon_url: "http://www.looker.com/favicon.ico"
     }
