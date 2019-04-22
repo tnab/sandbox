@@ -87,6 +87,7 @@ explore: order_items {
     view_label: "test"
     sql_on: ${order_items.order_id} = ${orders.id} ;;
     relationship: many_to_one
+    fields: []
   }
 
   join: products {
@@ -154,6 +155,7 @@ explore: users {
   join: user_facts {
     sql_on: ${user_facts.user_id} = ${users.id} ;;
     relationship: one_to_one
+    # fields: []
   }
 }
 

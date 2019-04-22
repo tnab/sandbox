@@ -68,7 +68,10 @@ view: order_items {
   dimension: sale_price {
     type: number
     sql: ${TABLE}.sale_price ;;
-    value_format: "\"£\"0.00"
+    # value_format: "\"£\"0.00"
+    # value_format: "$0.000000"
+    # value_format_name: usd_2
+    value_format: "\"?\"0.0000"
   }
 
   measure: total_sale {
@@ -192,7 +195,7 @@ dimension_group: test_label {
     type: sum
     sql: ${sale_price} ;;
     drill_fields: [details*]
-    value_format: "0.##"
+    value_format: "\$0.000000"
   }
 
   measure: test_sum_price {

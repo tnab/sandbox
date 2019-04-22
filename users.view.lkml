@@ -13,6 +13,11 @@ view: users {
     sql: {% condition %}${gender}{% endcondition %} ;;
   }
 
+  dimension: city_state {
+    type: string
+    sql: concat(${city},", ", "CA") ;;
+  }
+
   dimension: a_b {
     type: yesno
     sql:
@@ -189,12 +194,17 @@ view: users {
   dimension: city {
     type: string
     sql: ${TABLE}.city ;;
+#     link: {
+#       label: "Zip"
+#       url: "/dashboards/6?City={{ value }}
+#       &State={{  _filters['users.state'] | url_encode  }}
+#       &&Country={{  _filters['users.country'] | url_encode  }}
+#       "
+#     }
     link: {
-      label: "Zip"
-      url: "/dashboards/6?City={{ value }}
-      &State={{  _filters['users.state'] | url_encode  }}
-      &&Country={{  _filters['users.country'] | url_encode  }}
-      "
+      label: "Test URL"
+      url: "{{ _user_attributes['url'] }}"
+
     }
   }
 
@@ -320,7 +330,7 @@ view: users {
     sql: ${gender};;
     link: {
       label: "Test Link"
-      url: "{{ users.gender._link }}"
+      url: "{{ users.count._link }}"
       icon_url: "http://www.looker.com/favicon.ico"
     }
   }
