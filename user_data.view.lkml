@@ -17,7 +17,15 @@ view: user_data {
     sql: ${TABLE}.total_num_orders ;;
   }
 
-  dimension: user_id {
+  # dimension: week_of_year {
+  #   label: "This week"
+  #   view_label: "4. Usage Metrics"
+  #   description: "Yes = Event was saved"
+  #   type: date_week_of_year
+  #   sql: ${event_time};;
+  # }
+
+  dimension: user_id_to_change {
     type: number
     # hidden: yes
     sql: ${TABLE}.user_id ;;
@@ -25,6 +33,6 @@ view: user_data {
 
   measure: count {
     type: count
-    drill_fields: [id, users.first_name, users.last_name, users.id]
+    drill_fields: [id, users.first_name, users.last_name, users.id, users.count]
   }
 }

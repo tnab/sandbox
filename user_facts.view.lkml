@@ -2,7 +2,8 @@ view: user_facts{
   derived_table: {
     sql:  SELECT
             user_id as user_id
-            , state AS state
+            , u.state AS state
+            , u.created_at AS created
             , CASE WHEN user_id = 1 THEN NULL ELSE user_id END AS test_id
             , COUNT(o.id) as user_lifetime_orders
             , COUNT(oi.id) as user_lifetime_items
@@ -20,8 +21,9 @@ view: user_facts{
         ON u.id = o.user_id
         JOIN demo_db.order_items oi
         ON oi.order_id = o.id
-        WHERE u.id = COALESCE ({% parameter p_filter_field %}, u.id)
-        GROUP BY 1  ;;
+        WHERE u.id = COALESCE ({% parameter p_filter_field %}, u.id) AND {% condition user_facts.dt_filter %} u.created_at {% endcondition %}
+
+        GROUP BY 1,2,3  ;;
   }
 
 
@@ -46,6 +48,10 @@ filter: filter_field {
   type: string
 }
 
+filter: dt_filter {
+  type: date
+}
+
 
 
 # Define your dimensions and measures here, like this:
@@ -59,6 +65,17 @@ filter: filter_field {
   dimension: test_id {
     type: number
     sql: ${TABLE}.test_id ;;
+  }
+
+  dimension_group: created {
+    type: time
+    datatype: datetime
+    timeframes: [
+      date,
+      time,
+      raw
+    ]
+    sql: ${TABLE}.created ;;
   }
 
   dimension: test_yes {

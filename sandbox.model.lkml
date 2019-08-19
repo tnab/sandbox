@@ -25,6 +25,7 @@ explore: oi_test {
 
 explore: user_facts {}
 
+
 # explore: test {
 #   from: users
 #
@@ -96,11 +97,11 @@ explore: order_items {
     relationship: many_to_one
   }
 
-#   join: users {
-#     type: left_outer
-#     sql_on: ${orders.user_id} = ${users.id} AND ${users.id}  ;;
-#     relationship: many_to_one
-#   }
+  # join: users {
+  #   type: left_outer
+  #   sql_on: ${orders.user_id} = ${users.id} AND ${users.id}  ;;
+  #   relationship: many_to_one
+  # }
 
 }
 
@@ -120,6 +121,10 @@ explore: orders {
     sql_on: ${order_items.order_id} = ${orders.id} ;;
     relationship: one_to_many
   }
+  join: users {
+    relationship: many_to_one
+    sql_on: orders.user_id ;;
+  }
 
 #   join: 7days {
 #     from: orders
@@ -135,7 +140,7 @@ explore: schema_migrations {}
 explore: user_data {
   join: users {
     type: left_outer
-    sql_on: ${user_data.user_id} = ${users.id} ;;
+    sql_on: ${user_data.user_id_to_change} = ${users.id} ;;
     relationship: many_to_one
   }
 }
@@ -144,6 +149,7 @@ explore: user_data {
 explore: bucket_size {}
 
 explore: users {
+
   join: user_age_quartile {
     sql_on: ${users.id} = ${user_age_quartile.user_id} ;;
     relationship: one_to_one

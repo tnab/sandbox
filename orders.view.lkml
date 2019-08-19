@@ -26,6 +26,40 @@ view: orders {
     sql: ${TABLE}.created_at ;;
   }
 
+  dimension: test_week {
+    type: date_week_of_year
+    sql: ${TABLE}.created_at ;;
+  }
+
+  dimension: week_of_year {
+    type: date_week_of_year
+    sql: now() ;;
+  }
+
+  dimension: comparison {
+    type: yesno
+    sql: ${created_week_of_year} = ${week_of_year} ;;
+  }
+
+  dimension: comparison2 {
+    type: yesno
+    sql: ${created_week_of_year} = ${test_week} ;;
+  }
+
+  dimension: testing_html {
+    type: string
+    html:
+    <ul>
+    <li> {{users.id._value}} </li>
+    <li> {{users.state._value}} </li>
+
+    </ul>;;
+    sql: 1 ;;
+  }
+
+    # <li> {{places.address._value}} </li>
+    # <li> {{places.city._value}}, {{places.state._value}} {{places.postal_code._value}} </li>
+
   dimension: status {
     type: string
     sql: ${TABLE}.status ;;
@@ -267,11 +301,11 @@ dimension: sale_price {
 #   sql: ${start_date_size}  - ${end_date_size};;
 # }
 #
-# dimension: user_id {
-#   type: number
-#   # hidden: yes
-#   sql: ${TABLE}.user_id ;;
-# }
+dimension: user_id {
+  type: number
+  # hidden: yes
+  sql: ${TABLE}.user_id ;;
+}
 
 measure: count {
   type: count
