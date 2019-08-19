@@ -565,10 +565,11 @@ measure: filtered_count {
 set: detail {
   fields: [
 #     id,
-#     first_name,
+    first_name,
 #     last_name,
-  email
-]
+#     email,
+    count
+  ]
 }
 
 set: time_drill {
