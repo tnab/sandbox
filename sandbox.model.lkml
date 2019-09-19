@@ -36,6 +36,8 @@ explore: user_facts {}
 #
 # }
 
+explore: users {}
+
 # explore: order_items {
 #
 #   join: orders {
@@ -148,7 +150,8 @@ explore: user_data {
 
 explore: bucket_size {}
 
-explore: users {
+explore: users_a {
+  view_name: users
 
   join: user_age_quartile {
     sql_on: ${users.id} = ${user_age_quartile.user_id} ;;

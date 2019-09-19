@@ -1,4 +1,4 @@
-view: users {
+view: users_breakthis{
   sql_table_name: demo_db.users ;;
 
 
@@ -340,6 +340,7 @@ dimension: first_name {
   type: string
   sql: ${TABLE}.first_name ;;
   html: <font face="Arial" color="green">{{value}}</font> ;;
+  drill_fields: [detail*]
 }
 
 dimension: filtered_name {
@@ -458,6 +459,7 @@ measure: count {
 #     }
   # value_format: "*00#"
   drill_fields: [detail*]
+  html: <a href="#drillmenu" target="_self"> <font face="Arial" color="green">{{rendered_value}}</font> </a>;;
 }
 
 measure: count_formatted {
