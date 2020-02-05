@@ -220,6 +220,7 @@ dimension: state {
 dimension: city {
   type: string
   sql: ${TABLE}.city ;;
+  map_layer_name: my_neighborhood_layer
 #     link: {
 #       label: "Zip"
 #       url: "/dashboards/6?City={{ value }}

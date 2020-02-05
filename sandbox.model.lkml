@@ -13,6 +13,11 @@ datagroup: the_looker_etl {
 
 # week_start_day: sunday
 
+
+map_layer: my_neighborhood_layer {
+  file: "tokyo.topojson"
+}
+
 persist_with: the_looker_etl
 
 explore: derived_test_base {}
