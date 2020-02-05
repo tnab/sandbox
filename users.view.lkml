@@ -474,10 +474,11 @@ measure: count_formatted {
 
 measure: count_foo {
   type: count
-  filters: {
-    field: id
-    value: "0" # use "NOT NULL" if this is a number field
-  }
+  # filters: {
+  #   field: id
+  #   value: "0" # use "NOT NULL" if this is a number field
+  # }
+  required_fields: [city]
 }
 dimension: age_groups {
   type: tier

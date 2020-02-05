@@ -36,6 +36,33 @@ view: order_items {
     ;;
   }
 
+  # This is referencing the dimension to extract the date:
+  dimension: primary_date {
+    type: date
+    sql:  ${TABLE}.returned_at ;;
+  }
+
+  dimension_group: liquid_start_date {
+    type: time
+    sql: {% date_start primary_date %} ;;
+  }
+
+  dimension: liquid_end_date {
+    type: date
+    sql: {% date_end primary_date %} ;;
+  }
+
+  # This is how the docs say to use it:
+
+  filter: use_date {
+    type: date
+  }
+
+  dimension_group: this_sholud_work {
+    type: time
+    sql: {% date_start use_date %} ;;
+  }
+
   # sql:CASE WHEN ${TABLE}.returned_at IS NOT NULL
   # THEN ${TABLE}.returned_at
   # ELSE 0 END ;;
@@ -49,7 +76,12 @@ view: order_items {
   dimension: drillable_number {
     type: number
     sql: ${sale_price};;
-    html: <a href="https://ec2-18-232-113-228.compute-1.amazonaws.com:9999/explore/sandbox/order_items?qid=VESmyvu5DobjgTwsJS9trI&toggle=vis">{{ value }}</a> ;;
+    drill_fields: [inventory_items.id]
+#     html: <a href="https://ec2-18-232-113-228.compute-1.amazonaws.com:9999/explore/sandbox/order_items?qid=VESmyvu5DobjgTwsJS9trI&toggle=vis">{{ value }}</a> ;;
+  link: {
+    label: "testing this"
+    url: "https://ec2-18-232-113-228.compute-1.amazonaws.com:9999/explore/sandbox/order_items?qid=VESmyvu5DobjgTwsJS9trI&toggle=vis{{ value }}"
+  }
   }
 
 

@@ -25,6 +25,8 @@ explore: oi_test {
 
 explore: user_facts {}
 
+# explore: users {}
+
 
 # explore: test {
 #   from: users
