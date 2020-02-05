@@ -1,4 +1,4 @@
-view: users_breakthis{
+view: users{
   sql_table_name: demo_db.users ;;
 
 
